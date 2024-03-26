@@ -1,0 +1,9 @@
+{
+   "C_Cpp.default.cppStandard": "c++17",
+   "C_Cpp.default.cStandard": "c17",
+   "C_Cpp.default.includePath": [
+      "${workspaceFolder}/install/include",
+      "${workspaceFolder}/extern/pybind11/include",
+      "/opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11"
+   ]
+}

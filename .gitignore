@@ -1,6 +1,13 @@
+# job files
+*.cobaltlog
+*.error
+*.output
+
 # cmake
 build
+build_debug
 install
+install_debug
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

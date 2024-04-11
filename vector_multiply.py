@@ -3,8 +3,9 @@ import vecmul as vm
 import time
 
 vm.init()
+vm.print_hw_config()
 
-array_size = 1000000000
+array_size = 1000
 a = np.random.randint(0,100,array_size)
 b = np.random.randint(0,100,array_size)
 

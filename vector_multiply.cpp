@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include "Kokkos_Core.hpp"
+#include <iostream>
 
 namespace py = pybind11;
 
@@ -11,6 +12,10 @@ using h_kvint1d = Kokkos::View<int*, Kokkos::HostSpace>;
 // function to initialize kokkos
 void init(){
    Kokkos::initialize();
+}
+
+void print_hw_config(){
+   Kokkos::DefaultExecutionSpace{}.print_configuration(std::cout, true);
 }
 
 // function to finalize kokkos
@@ -35,9 +40,8 @@ py::array_t<T> vectorMultiplyTemplate(py::array_t<T, py::array::c_style | py::ar
    
    auto d_arr1 = Kokkos::create_mirror_view_and_copy(Kokkos::DefaultExecutionSpace(), h_arr1);
    auto d_arr2 = Kokkos::create_mirror_view_and_copy(Kokkos::DefaultExecutionSpace(), h_arr2);
-   Kokkos::View<T*, Kokkos::DefaultExecutionSpace> d_arr3("d_arr3", size);
+   Kokkos::View<T*, Kokkos::DefaultExecutionSpace> d_arr3(Kokkos::ViewAllocateWithoutInitializing("d_arr3"), size);
 
-   // Your computation here...
    // This example assumes you can perform similar operations on T type
    Kokkos::parallel_for("vectorMultiply", size, KOKKOS_LAMBDA(const int& i) {
       d_arr3(i) = d_arr1(i) * d_arr2(i);
@@ -108,6 +112,7 @@ PYBIND11_MODULE(vecmul, m) {
    // call the init and finalize functions
    m.def("init", &init);
    m.def("finalize", &finalize);
+   m.def("print_hw_config", &print_hw_config);
 
    m.def("vector_multiply_int", &vectorMultiplyInt, "Int Vector multiplication using Kokkos");
    m.def("vector_multiply_float", &vectorMultiplyFloat, "Float Vector multiplication using Kokkos");

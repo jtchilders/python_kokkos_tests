@@ -5,4 +5,4 @@
 [submodule "extern/kokkos"]
 	path = extern/kokkos
 	url = https://github.com/kokkos/kokkos.git
-	branch = release-candidate-4.2.01
+	branch = release-candidate-4.3.00

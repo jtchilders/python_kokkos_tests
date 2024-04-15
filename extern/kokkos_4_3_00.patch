@@ -1,0 +1,46 @@
+diff --git a/core/src/Cuda/Kokkos_Cuda_Instance.cpp b/core/src/Cuda/Kokkos_Cuda_Instance.cpp
+index 849e8b3b3..b35ecba96 100644
+--- a/core/src/Cuda/Kokkos_Cuda_Instance.cpp
++++ b/core/src/Cuda/Kokkos_Cuda_Instance.cpp
+@@ -194,8 +194,8 @@ void cuda_internal_error_abort(cudaError e, const char *name, const char *file,
+ //----------------------------------------------------------------------------
+ 
+ int Impl::CudaInternal::concurrency() {
+-  static int const concurrency = m_deviceProp.maxThreadsPerMultiProcessor *
+-                                 m_deviceProp.multiProcessorCount;
++  static int const concurrency = singleton().m_deviceProp.maxThreadsPerMultiProcessor *
++                                 singleton().m_deviceProp.multiProcessorCount;
+   return concurrency;
+ }
+ 
+@@ -540,7 +540,7 @@ void Cuda::impl_initialize(InitializationSettings const &settings) {
+   cudaDeviceProp cudaProp;
+   KOKKOS_IMPL_CUDA_SAFE_CALL(
+       cudaGetDeviceProperties(&cudaProp, cuda_device_id));
+-  Impl::CudaInternal::m_deviceProp = cudaProp;
++  Impl::CudaInternal::singleton().m_deviceProp = cudaProp;
+   KOKKOS_IMPL_CUDA_SAFE_CALL(cudaSetDevice(cuda_device_id));
+   KOKKOS_IMPL_CUDA_SAFE_CALL(cudaDeviceSynchronize());
+ 
+@@ -729,7 +729,7 @@ cudaStream_t Cuda::cuda_stream() const {
+ }
+ int Cuda::cuda_device() const { return m_space_instance->m_cudaDev; }
+ const cudaDeviceProp &Cuda::cuda_device_prop() const {
+-  return m_space_instance->m_deviceProp;
++  return m_space_instance->singleton().m_deviceProp;
+ }
+ 
+ namespace Impl {
+diff --git a/core/src/Cuda/Kokkos_Cuda_Instance.hpp b/core/src/Cuda/Kokkos_Cuda_Instance.hpp
+index 24f4af310..6aef4502f 100644
+--- a/core/src/Cuda/Kokkos_Cuda_Instance.hpp
++++ b/core/src/Cuda/Kokkos_Cuda_Instance.hpp
+@@ -94,7 +94,7 @@ class CudaInternal {
+   inline static int m_cudaArch = -1;
+   static int concurrency();
+ 
+-  inline static cudaDeviceProp m_deviceProp;
++  cudaDeviceProp m_deviceProp;
+ 
+   // Scratch Spaces for Reductions
+   mutable std::size_t m_scratchSpaceCount;

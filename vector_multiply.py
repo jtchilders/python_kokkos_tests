@@ -5,7 +5,7 @@ import time
 vm.init()
 vm.print_hw_config()
 
-array_size = 10000000
+array_size = 10
 a = np.random.randint(0,100,array_size)
 b = np.random.randint(0,100,array_size)
 
@@ -15,19 +15,25 @@ start = time.time()
 c = vm.vector_multiply_int(a,b)
 end = time.time()
 kokkos_time = end - start
-print( f'{"openmp: ":<10} {end - start:.4g}  ({(end - start) / kokkos_time:.4g})')
+print( f'{"on-device: ":<30} {end - start:.4g}  ({(end - start) / kokkos_time:.4g})')
+
+# test timing with vectorization
+start = time.time()
+c = vm.vector_multiply_vv_int(a,b)
+end = time.time()
+print( f'{"vectorized on-device: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
 
 # numpy test timing
 start = time.time()
 c = np.multiply(a,b)
 end = time.time()
-print( f'{"numpy: ":<10} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+print( f'{"numpy: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
 
 # serial test timing
 start = time.time()
 c = vm.vector_multiply_serial_int(a,b)
 end = time.time()
-print( f'{"serial: ":<10} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+print( f'{"serial: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
 
 
 
@@ -41,19 +47,26 @@ start = time.time()
 c = vm.vector_multiply_float(a,b)
 end = time.time()
 kokkos_time = end - start
-print( f'{"openmp: ":<10} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+print( f'{"on-device: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+
+# test timing with vectorization
+start = time.time()
+c = vm.vector_multiply_vv_float(a,b)
+end = time.time()
+print( f'{"vectorized on-device: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
 
 # numpy test timing
 start = time.time()
 c = np.multiply(a,b)
 end = time.time()
-print( f'{"numpy: ":<10} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+print( f'{"numpy: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
 
 # serial test timing
 start = time.time()
 c = vm.vector_multiply_serial_float(a,b)
 end = time.time()
-print( f'{"serial: ":<10} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+print( f'{"serial: ":<30} {end - start:.4g}  ({ (end - start) / kokkos_time:.4g})')
+
 
 
 

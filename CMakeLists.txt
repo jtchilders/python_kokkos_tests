@@ -24,3 +24,6 @@ target_link_libraries(vecmul PRIVATE Kokkos::kokkos)
 
 pybind11_add_module(classex class_example.cpp)
 target_link_libraries(classex PRIVATE Kokkos::kokkos)
+
+add_executable(simd_test simd_test.cpp)
+target_link_libraries(simd_test PRIVATE Kokkos::kokkos)

@@ -5,8 +5,6 @@
 // create some tests of the simd functions
 
 // define some types
-template<typename T,typename U>
-using simd = Kokkos::Experimental::simd<T,U>;
 using double_v = Kokkos::Experimental::native_simd<double>;
 using int_v = Kokkos::Experimental::native_simd<std::int64_t>;
 

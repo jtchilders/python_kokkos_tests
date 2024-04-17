@@ -5,6 +5,8 @@
 // create some tests of the simd functions
 
 // define some types
+template<typename T,typename U>
+using simd = Kokkos::Experimental::simd<T,U>;
 using double_v = Kokkos::Experimental::native_simd<double>;
 using int_v = Kokkos::Experimental::native_simd<std::int64_t>;
 
@@ -14,6 +16,14 @@ void fill_random(Kokkos::View<T*, Kokkos::DefaultExecutionSpace> view) {
    // fill view with random numbers
    Kokkos::parallel_for("fill_random", view.size(), KOKKOS_LAMBDA(const int& i) {
       view(i) = rand() % 100;
+   });
+}
+template<typename T>
+void fill_random(Kokkos::View<Kokkos::Experimental::native_simd<T>*, Kokkos::DefaultExecutionSpace> view) {
+   // fill view with random numbers
+   Kokkos::parallel_for("fill_random", view.size(), KOKKOS_LAMBDA(const int& i) {
+      for(int j=0; j<Kokkos::Experimental::native_simd<T>::size();++j)
+         view(i)[j] = rand() % 100;
    });
 }
 
@@ -74,14 +84,18 @@ int main(int argc, char* argv[]) {
    Kokkos::ScopeGuard guard(argc, argv);
    
    // set view length using the command line
-   int view_length = 1000000;
+   int view_length = 1048576;
    if(argc > 1)
       view_length = atoi(argv[1]);
    std::cout << "View length: " << view_length << std::endl;
 
+   // set simd-view length based on simd register size
+   const int simd_length = view_length / double_v::size();
+   std::cout << "SIMD length: " << simd_length << std::endl;
+
    // create a view of simd objects and run some tests
-   Kokkos::View<double_v*, Kokkos::DefaultExecutionSpace> view1("view1", view_length);
-   Kokkos::View<double_v*, Kokkos::DefaultExecutionSpace> view2("view2", view_length);
+   Kokkos::View<double_v*, Kokkos::DefaultExecutionSpace> view1("view1", simd_length);
+   Kokkos::View<double_v*, Kokkos::DefaultExecutionSpace> view2("view2", simd_length);
 
    // fill the view with random numbers
    fill_random(view1);

@@ -62,7 +62,7 @@ void run_tests(Kokkos::View<T*, Kokkos::DefaultExecutionSpace> view1, Kokkos::Vi
       view2(i) /= (view1(i) * view2(i)) / view1(i);
    });
 
-   
+   Kokkos::fence();
 }
 
 
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
    Kokkos::ScopeGuard guard(argc, argv);
    
    // set view length using the command line
-   int view_length = 1000;
+   int view_length = 1000000;
    if(argc > 1)
       view_length = atoi(argv[1]);
    std::cout << "View length: " << view_length << std::endl;

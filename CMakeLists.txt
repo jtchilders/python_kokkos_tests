@@ -27,3 +27,6 @@ target_link_libraries(classex PRIVATE Kokkos::kokkos)
 
 add_executable(simd_test simd_test.cpp)
 target_link_libraries(simd_test PRIVATE Kokkos::kokkos)
+
+add_executable(pepper_simd pepper_simd/pepper_simd.cpp)
+target_link_libraries(pepper_simd PRIVATE Kokkos::kokkos)

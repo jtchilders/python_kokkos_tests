@@ -30,3 +30,16 @@ target_link_libraries(simd_test PRIVATE Kokkos::kokkos)
 
 add_executable(pepper_simd pepper_simd/pepper_simd.cpp)
 target_link_libraries(pepper_simd PRIVATE Kokkos::kokkos)
+
+add_executable(pepper_complex pepper_simd/pepper_complex_simd.cpp)
+target_link_libraries(pepper_complex PRIVATE Kokkos::kokkos)
+
+include(GNUInstallDirs)
+
+install(TARGETS pykos matmul vecmul classex
+  COMPONENT python
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+install(TARGETS simd_test pepper_simd pepper_complex RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")

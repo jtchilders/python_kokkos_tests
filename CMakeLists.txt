@@ -21,6 +21,8 @@ target_link_libraries(matmul PRIVATE Kokkos::kokkos)
 pybind11_add_module(vecmul vector_multiply.cpp)
 target_link_libraries(vecmul PRIVATE Kokkos::kokkos)
 
+pybind11_add_module(tenex tensor_example.cpp)
+target_link_libraries(tenex PRIVATE Kokkos::kokkos)
 
 pybind11_add_module(classex class_example.cpp)
 target_link_libraries(classex PRIVATE Kokkos::kokkos)
@@ -36,7 +38,7 @@ target_link_libraries(pepper_complex PRIVATE Kokkos::kokkos)
 
 include(GNUInstallDirs)
 
-install(TARGETS pykos matmul vecmul classex
+install(TARGETS pykos matmul vecmul classex tenex
   COMPONENT python
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
